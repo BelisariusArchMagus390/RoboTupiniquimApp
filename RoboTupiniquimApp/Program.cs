@@ -99,5 +99,19 @@
 
             return grid;
         }
+        static char[,] updatePosition(char[,] grid, int[] position)
+        {
+            int[] oldPosition = searchElementPosition(grid);
+            int oldline = oldPosition[0];
+            int oldColumn = oldPosition[1];
+            grid[oldline, oldColumn] = '#';
+
+            int line = position[0];
+            int column = position[1];
+
+            grid[line, column] = 'O';
+
+            return grid;
+        }
     }
 }
