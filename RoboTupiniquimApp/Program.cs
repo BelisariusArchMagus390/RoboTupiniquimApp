@@ -99,6 +99,7 @@
 
             return grid;
         }
+
         static char[,] updatePosition(char[,] grid, int[] position)
         {
             int[] oldPosition = searchElementPosition(grid);
@@ -112,6 +113,28 @@
             grid[line, column] = 'O';
 
             return grid;
+        }
+
+        static int[] searchElementPosition(char[,] grid)
+        {
+            char element = 'O';
+            int lineSize = grid.GetLength(0);
+            int columnSize = grid.GetLength(1);
+            int[] position = new int[2];
+
+            for (int line = 0; line < lineSize; line++)
+            {
+                for (int column = 0; column < columnSize; column++)
+                {
+                    if (grid[line, column] == 'O')
+                    {
+                        position[0] = line;
+                        position[1] = column;
+                    }
+
+                }
+            }
+            return position;
         }
     }
 }
