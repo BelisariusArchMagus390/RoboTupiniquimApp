@@ -63,5 +63,31 @@
             }
             return grid;
         }
+
+        static void showGrid(char[,] grid, int lineSize, int columnSize)
+        {
+            int numberLines = lineSize - 1;
+
+            for (int line = 0; line <= lineSize; line++)
+            {
+                if (line < lineSize)
+                {
+                    Console.Write($"{numberLines} ");
+                    numberLines--;
+                }
+
+                for (int column = 0; column <= columnSize; column++)
+                {
+                    if (column < columnSize && line < lineSize)
+                        Console.Write($"{grid[line, column]} ");
+                    else if (column == 0)
+                        Console.Write($"  {column}");
+                    else if ((column < columnSize) && (column > 0))
+                        Console.Write($" {column}");
+                }
+
+                Console.WriteLine();
+            }
+        }
     }
 }
