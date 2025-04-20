@@ -219,5 +219,75 @@
 
             return resultPosition;
         }
+
+        static char[,] useCommands(char[,] grid, string commands, char orient)
+        {
+            commands = commands.ToUpper();
+            char inputOrientation = orient;
+            char[] directions = ['N', 'E', 'S', 'W'];
+
+            char robotOrientation = orient;
+
+            int positionDirection = 0;
+
+            foreach (char command in commands)
+            {
+                if (command != 'M')
+                {
+                    inputOrientation = command;
+
+                    positionDirection = Array.IndexOf(directions, robotOrientation);
+
+                    switch (inputOrientation)
+                    {
+                        case 'N':
+
+                            if (robotOrientation == 'E')
+                                robotOrientation = directions[newPositionDirection(directions, positionDirection, -1)];
+                            else if (robotOrientation == 'W')
+                                robotOrientation = directions[newPositionDirection(directions, positionDirection, 1)];
+
+                            break;
+                        case 'E':
+
+                            robotOrientation = directions[newPositionDirection(directions, positionDirection, 1)];
+
+                            break;
+                        case 'S':
+
+                            if (robotOrientation == 'E')
+                                robotOrientation = directions[newPositionDirection(directions, positionDirection, 1)];
+                            else if (robotOrientation == 'W')
+                                robotOrientation = directions[newPositionDirection(directions, positionDirection, -1)];
+
+                            break;
+                        case 'W':
+
+                            robotOrientation = directions[newPositionDirection(directions, positionDirection, -1)];
+
+                            break;
+                    }
+                }
+                else if (command == 'M')
+                {
+                    switch (robotOrientation)
+                    {
+                        case 'N':
+                            grid = moveNorth(grid);
+                            break;
+                        case 'E':
+                            grid = moveEast(grid);
+                            break;
+                        case 'S':
+                            grid = moveSouth(grid);
+                            break;
+                        case 'W':
+                            grid = moveWest(grid);
+                            break;
+                    }
+                }
+            }
+            return grid;
+        }
     }
 }
