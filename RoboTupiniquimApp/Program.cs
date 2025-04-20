@@ -51,5 +51,17 @@
 
             Console.ReadLine();
         }
+
+        static char[,] createGrid(char[,] grid, int lineSize, int columnSize)
+        {
+            for (int line = 0; line < lineSize; line++)
+            {
+                for (int column = 0; column < columnSize; column++)
+                {
+                    grid[line, column] = '#';
+                }
+            }
+            return grid;
+        }
     }
 }
