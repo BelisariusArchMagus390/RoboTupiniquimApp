@@ -37,6 +37,8 @@ namespace RoboTupiniquimApp.Console
                     {
                         if (int.TryParse(splitDimensionsGrid[i], out dimensions[i]))
                         {
+                            dimensions[i]++;
+
                             if (i == (size - 1))
                                 ifExit = true;
                         }
