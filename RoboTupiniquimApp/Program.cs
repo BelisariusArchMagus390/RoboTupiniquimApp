@@ -136,5 +136,19 @@
             }
             return position;
         }
+
+        static bool ifMove(char[,] grid, int[] position)
+        {
+            int nextLine = position[0];
+            int nextColumn = position[1];
+
+            int lineSize = grid.GetLength(0);
+            int columnSize = grid.GetLength(1);
+
+            if ((nextLine < lineSize) && (nextColumn < columnSize))
+                return true;
+            else
+                return false;
+        }
     }
 }
