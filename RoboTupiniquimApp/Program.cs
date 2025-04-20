@@ -164,5 +164,18 @@
 
             return grid;
         }
+
+        static char[,] moveEast(char[,] grid)
+        {
+            int[] position = searchElementPosition(grid);
+            position[1] += 1;
+
+            if (ifMove(grid, position))
+            {
+                grid = updatePosition(grid, position);
+            }
+
+            return grid;
+        }
     }
 }
