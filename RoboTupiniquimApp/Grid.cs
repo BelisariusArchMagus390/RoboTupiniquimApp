@@ -9,25 +9,25 @@ namespace RoboTupiniquimApp.Console
 {
     internal class Grid
     {
-        public char[,] grid { get; set; }
-
-        public void create(int lineSize, int columnSize)
+        public char[,] create(int lineSize, int columnSize)
         {
-            grid = new char[lineSize, columnSize];
+            char[,] gridMap = new char[lineSize, columnSize];
 
             for (int line = 0; line < lineSize; line++)
             {
                 for (int column = 0; column < columnSize; column++)
                 {
-                    grid[line, column] = '#';
+                    gridMap[line, column] = '#';
                 }
             }
+
+            return gridMap;
         }
 
-        public void show()
+        public void show(char[,] gridMap)
         {
-            int lineSize = grid.GetLength(0);
-            int columnSize = grid.GetLength(1);
+            int lineSize = gridMap.GetLength(0);
+            int columnSize = gridMap.GetLength(1);
 
             int numberLines = lineSize - 1;
 
@@ -42,7 +42,7 @@ namespace RoboTupiniquimApp.Console
                 for (int column = 0; column <= columnSize; column++)
                 {
                     if (column < columnSize && line < lineSize)
-                        System.Console.Write($"{grid[line, column]} ");
+                        System.Console.Write($"{gridMap[line, column]} ");
                     else if (column == 0)
                         System.Console.Write($"  {column}");
                     else if ((column < columnSize) && (column > 0))
@@ -53,31 +53,33 @@ namespace RoboTupiniquimApp.Console
             }
         }
 
-        public void update(int[] position)
+        public char[,] update(int[] position, char[,] gridMap)
         {
-            int[] oldPosition = searchElementPosition();
+            int[] oldPosition = searchElementPosition(gridMap);
             int oldline = oldPosition[0];
             int oldColumn = oldPosition[1];
-            grid[oldline, oldColumn] = '#';
+            gridMap[oldline, oldColumn] = '#';
 
             int line = position[0];
             int column = position[1];
 
-            grid[line, column] = 'O';
+            gridMap[line, column] = 'O';
+
+            return gridMap;
         }
 
-        private int[] searchElementPosition()
+        public int[] searchElementPosition(char[,] gridMap)
         {
             char element = 'O';
-            int lineSize = grid.GetLength(0);
-            int columnSize = grid.GetLength(1);
+            int lineSize = gridMap.GetLength(0);
+            int columnSize = gridMap.GetLength(1);
             int[] position = new int[2];
 
             for (int line = 0; line < lineSize; line++)
             {
                 for (int column = 0; column < columnSize; column++)
                 {
-                    if (grid[line, column] == 'O')
+                    if (gridMap[line, column] == 'O')
                     {
                         position[0] = line;
                         position[1] = column;
