@@ -190,5 +190,34 @@
 
             return grid;
         }
+
+        static char[,] moveWest(char[,] grid)
+        {
+            int[] position = searchElementPosition(grid);
+            position[1] -= 1;
+
+            if (ifMove(grid, position))
+            {
+                grid = updatePosition(grid, position);
+            }
+
+            return grid;
+        }
+
+        static int newPositionDirection(char[] directions, int positionDirection, int movement)
+        {
+            int arraySize = directions.Length;
+            int newPosition = positionDirection + movement;
+            int resultPosition = 0;
+
+            if (newPosition < arraySize && newPosition >= 0)
+                resultPosition = positionDirection + movement;
+            else if (newPosition < 0)
+                resultPosition = arraySize - 1;
+            else if (resultPosition >= arraySize)
+                resultPosition = 0;
+
+            return resultPosition;
+        }
     }
 }
