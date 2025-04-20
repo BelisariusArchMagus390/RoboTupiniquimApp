@@ -89,5 +89,15 @@
                 Console.WriteLine();
             }
         }
+
+        static char[,] firstPositionDeploy(char[,] grid, int[] position, int columnSize)
+        {
+            int column = position[0];
+            int line = columnSize - (position[1] + 1);
+
+            grid[line, column] = 'O';
+
+            return grid;
+        }
     }
 }
