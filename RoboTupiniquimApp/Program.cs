@@ -5,6 +5,8 @@ namespace RoboTupiniquimApp
 {
     internal class Program
     {
+        static List<Robot> robots = new List<Robot>();
+
         static void Main(string[] args)
         {
             string commands = "";
@@ -15,10 +17,10 @@ namespace RoboTupiniquimApp
             char[,] gridMap = new char[line, column];
             int[] position = [-1, -1];
             char orientation = ' ';
+            string robotName = "";
 
             Input input = new Input();
             Grid grid = new Grid();
-            Robot robot = new Robot();
 
             bool ifExit = false;
             while(ifExit == false)
@@ -32,9 +34,10 @@ namespace RoboTupiniquimApp
 
                 System.Console.WriteLine(" --------------------------------------------");
                 System.Console.WriteLine("\n 1 - Criar grade de exploração");
-                System.Console.WriteLine(" 2 - Posição de início do robô");
-                System.Console.WriteLine(" 3 - Comandos do robô");
-                System.Console.WriteLine(" 4 - Sair");
+                System.Console.WriteLine(" 2 - Pedir um robô");
+                System.Console.WriteLine(" 3 - Posição de início do robô");
+                System.Console.WriteLine(" 4 - Comandos do robô");
+                System.Console.WriteLine(" 5 - Sair");
 
                 System.Console.Write("\n Escolha uma das opções: ");
                 char optionMenu = System.Console.ReadLine()[0];
@@ -61,31 +64,19 @@ namespace RoboTupiniquimApp
                     case '2':
                         System.Console.Clear();
 
-                        if (line == 0 && column == 0)
+                        System.Console.Write("\n Escolha o nome do robô: ");
+                        robotName = System.Console.ReadLine();
+
+                        if (checkExistRobot(robotName))
                         {
-                            System.Console.WriteLine($"\n Erro! A grade de exploração ainda não foi criada.");
-                            System.Console.WriteLine(" Aperte Enter para continuar...");
-                            System.Console.ReadLine();
+                            showErrorMessage("Esse robô já existe.");
                         }
                         else
                         {
-                            showLegends();
+                            Robot robot = new Robot(robotName);
+                            robots.Add(robot);
 
-                            firstPositionDict = input.firstPosition();
-
-                            char[] orientationArray = firstPositionDict.Keys.ToArray();
-                            orientation = orientationArray[0];
-
-                            position = firstPositionDict[orientation];
-
-                            robot.setRobotGridMap(gridMap);
-                            robot.setPosition(position);
-
-                            gridMap = robot.getRobotGridMap();
-                            robot.firstPositionDeploy();
-
-                            grid.show(gridMap);
-
+                            System.Console.WriteLine($"\n O novo robô {robotName} foi pedido! ");
                             System.Console.WriteLine(" Aperte Enter para continuar...");
                             System.Console.ReadLine();
                         }
@@ -95,43 +86,93 @@ namespace RoboTupiniquimApp
                     case '3':
                         System.Console.Clear();
 
-                        if (position[0] == -1 && position[1] == -1)
+                        if (line == 0 && column == 0)
                         {
-                            System.Console.WriteLine($"\n Erro! Ainda não foi feito o posicionamento inicial do robô.");
-                            System.Console.WriteLine(" Aperte Enter para continuar...");
-                            System.Console.ReadLine();
+                            showErrorMessage("A grade de exploração ainda não foi criada.");
                         }
                         else
                         {
-                            showLegends();
-                            showPossibleCommands();
+                            System.Console.Write(" Escolha um robô: ");
+                            robotName = System.Console.ReadLine();
 
-                            commands = input.commandsRobot();
+                            if (checkExistRobot(robotName))
+                            {
+                                Robot bot = getRobot(robotName);
 
-                            robot.useCommands(commands, orientation);
+                                showLegends();
 
-                            grid.show(gridMap);
+                                firstPositionDict = input.firstPosition();
 
-                            position = robot.getPosition();
-                            orientation = robot.getOrientation();
+                                char[] orientationArray = firstPositionDict.Keys.ToArray();
+                                orientation = orientationArray[0];
 
-                            System.Console.WriteLine($" Posição final: {position[1]} {position[0]} | Orientação final: {orientation}\n");
+                                position = firstPositionDict[orientation];
 
-                            System.Console.WriteLine(" Aperte Enter para continuar...");
-                            System.Console.ReadLine();
+                                bot.setRobotGridMap(gridMap);
+                                bot.setPosition(position);
+
+                                gridMap = bot.getRobotGridMap();
+                                bot.firstPositionDeploy();
+
+                                grid.show(gridMap);
+
+                                System.Console.WriteLine(" Aperte Enter para continuar...");
+                                System.Console.ReadLine();
+                            }
+                            else
+                                showErrorMessage("Esse robô não existe.");
                         }
 
                         break;
 
                     case '4':
+                        System.Console.Clear();
+
+                        System.Console.Write(" Escolha um robô: ");
+                        robotName = System.Console.ReadLine();
+
+                        if (checkExistRobot(robotName))
+                        {
+                            Robot bot = getRobot(robotName);
+                            int[] pos = bot.getPosition();
+
+                            if (pos[0] == -1 && pos[1] == -1)
+                            {
+                                showErrorMessage("Ainda não foi feito o posicionamento inicial desse robô.");
+                            }
+                            else
+                            {
+                                showLegends();
+                                showPossibleCommands();
+
+                                commands = input.commandsRobot();
+
+                                bot.useCommands(commands, orientation);
+
+                                grid.show(gridMap);
+
+                                position = bot.getPosition();
+                                orientation = bot.getOrientation();
+
+                                System.Console.WriteLine($" Posição final: {position[1]} {position[0]} | Orientação final: {orientation}\n");
+
+                                System.Console.WriteLine(" Aperte Enter para continuar...");
+                                System.Console.ReadLine();
+                            }
+                        }
+                        else
+                            showErrorMessage("Esse robô não existe.");
+
+                        break;
+
+                    case '5':
                         ifExit = true;
                         break;
 
                     default:
                         System.Console.Clear();
-                        System.Console.WriteLine("\n Erro! Opção incorreta.");
-                        System.Console.WriteLine(" Aperte Enter para continuar...");
-                        System.Console.ReadLine();
+                        showErrorMessage("Opção incorreta.");
+
                         break;
                 }
             }
@@ -155,6 +196,41 @@ namespace RoboTupiniquimApp
             System.Console.WriteLine(" | W(West) - Oeste  | S(South) - Sul  |");
             System.Console.WriteLine("\n Mover o robô: ");
             System.Console.WriteLine(" | M - Mover                          |\n");
+        }
+
+        static bool checkExistRobot(string name)
+        {
+            bool response = false;
+
+            foreach (Robot bot in robots)
+            {
+                if (bot.getName() == name)
+                {
+                    response = true;
+                }
+            }
+            return response;
+        }
+
+        static Robot getRobot(string name)
+        {
+            Robot robot = new Robot(name);
+
+            foreach (Robot bot in robots)
+            {
+                if (bot.getName() == name)
+                {
+                    robot = bot;
+                }
+            }
+            return robot;
+        }
+
+        static void showErrorMessage(string message)
+        {
+            System.Console.WriteLine($"\n Erro! {message}");
+            System.Console.WriteLine(" Aperte Enter para continuar...");
+            System.Console.ReadLine();
         }
     }
 }

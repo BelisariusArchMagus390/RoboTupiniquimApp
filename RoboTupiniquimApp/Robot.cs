@@ -13,6 +13,13 @@ namespace RoboTupiniquimApp.Console
         public static char[,] RobotGridMap { get; set; }
         public static int[] Position { get; set; }
         public static char Orientation { get; set; }
+        public string Name { get; set; }
+
+        public Robot (string name)
+        {
+            Name = name;
+            Position = [-1, -1];
+        }
 
         public void setRobotGridMap(char[,] robotGridMap)
         {
@@ -37,6 +44,11 @@ namespace RoboTupiniquimApp.Console
         public char getOrientation()
         {
             return Orientation;
+        }
+
+        public string getName()
+        {
+            return Name;
         }
 
         public void firstPositionDeploy()
