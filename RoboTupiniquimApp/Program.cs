@@ -101,26 +101,32 @@ namespace RoboTupiniquimApp
                             if (checkExistRobot(robotName))
                             {
                                 Robot bot = getRobot(robotName);
+                                int[] pos = bot.getPosition();
 
-                                showLegends();
+                                if (pos[0] == -1 && pos[1] == -1)
+                                {
+                                    showLegends();
 
-                                firstPositionDict = input.firstPosition();
+                                    firstPositionDict = input.firstPosition();
 
-                                char[] orientationArray = firstPositionDict.Keys.ToArray();
-                                orientation = orientationArray[0];
+                                    char[] orientationArray = firstPositionDict.Keys.ToArray();
+                                    orientation = orientationArray[0];
 
-                                position = firstPositionDict[orientation];
+                                    position = firstPositionDict[orientation];
 
-                                bot.setRobotGridMap(gridMap);
-                                bot.setPosition(position);
+                                    bot.setRobotGridMap(gridMap);
+                                    bot.setPosition(position);
 
-                                gridMap = bot.getRobotGridMap();
-                                bot.firstPositionDeploy();
+                                    gridMap = bot.getRobotGridMap();
+                                    bot.firstPositionDeploy();
 
-                                grid.show(gridMap);
+                                    grid.show(gridMap);
 
-                                System.Console.WriteLine(" Aperte Enter para continuar...");
-                                System.Console.ReadLine();
+                                    System.Console.WriteLine(" Aperte Enter para continuar...");
+                                    System.Console.ReadLine();
+                                }
+                                else
+                                    showErrorMessage("Já foi feito o posicionamento inicial desse robô.");
                             }
                             else
                                 showErrorMessage("Esse robô não existe.");
