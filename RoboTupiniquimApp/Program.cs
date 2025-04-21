@@ -1,5 +1,6 @@
 ﻿using RoboTupiniquimApp.Console;
 using System.Data.Common;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace RoboTupiniquimApp
 {
@@ -18,6 +19,8 @@ namespace RoboTupiniquimApp
             int[] position = [-1, -1];
             char orientation = ' ';
             string robotName = "";
+
+            int robotMarkerCont = 1;
 
             Input input = new Input();
             Grid grid = new Grid();
@@ -74,13 +77,16 @@ namespace RoboTupiniquimApp
                         else
                         {
                             int[] coordinate = [-1, -1];
+                            char marker = robotMarkerCont.ToString()[0]; ;
 
-                            Robot robot = new Robot(robotName);
+                            Robot robot = new Robot(robotName, marker);
                             robot.setPosition(coordinate);
                             robots.Add(robot);
 
+                            robotMarkerCont++;
+
                             System.Console.WriteLine($"\n O novo robô {robotName} foi pedido! ");
-                            System.Console.WriteLine(" Aperte Enter para continuar...");
+                            System.Console.WriteLine("\n Aperte Enter para continuar...");
                             System.Console.ReadLine();
                         }
 
@@ -223,7 +229,8 @@ namespace RoboTupiniquimApp
 
         static Robot getRobot(string name)
         {
-            Robot robot = new Robot(name);
+            char marker = '1';
+            Robot robot = new Robot(name, marker);
 
             foreach (Robot bot in robots)
             {

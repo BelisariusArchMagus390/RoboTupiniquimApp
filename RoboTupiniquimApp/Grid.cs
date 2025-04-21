@@ -9,9 +9,10 @@ namespace RoboTupiniquimApp.Console
 {
     internal class Grid
     {
+        public static char[,] gridMap;
         public char[,] create(int lineSize, int columnSize)
         {
-            char[,] gridMap = new char[lineSize, columnSize];
+            gridMap = new char[lineSize, columnSize];
 
             for (int line = 0; line < lineSize; line++)
             {
@@ -57,9 +58,9 @@ namespace RoboTupiniquimApp.Console
             System.Console.WriteLine();
         }
 
-        public char[,] update(int[] position, char[,] gridMap)
+        public char[,] update(int[] position, char marker)
         {
-            int[] oldPosition = searchElementPosition(gridMap);
+            int[] oldPosition = searchElementPosition(marker);
             int oldline = oldPosition[0];
             int oldColumn = oldPosition[1];
             gridMap[oldline, oldColumn] = '#';
@@ -67,14 +68,13 @@ namespace RoboTupiniquimApp.Console
             int line = position[0];
             int column = position[1];
 
-            gridMap[line, column] = 'O';
+            gridMap[line, column] = marker;
 
             return gridMap;
         }
 
-        public int[] searchElementPosition(char[,] gridMap)
+        public int[] searchElementPosition(char marker)
         {
-            char element = 'O';
             int lineSize = gridMap.GetLength(0);
             int columnSize = gridMap.GetLength(1);
             int[] position = new int[2];
@@ -83,12 +83,11 @@ namespace RoboTupiniquimApp.Console
             {
                 for (int column = 0; column < columnSize; column++)
                 {
-                    if (gridMap[line, column] == 'O')
+                    if (gridMap[line, column] == marker)
                     {
                         position[0] = line;
                         position[1] = column;
                     }
-
                 }
             }
             return position;

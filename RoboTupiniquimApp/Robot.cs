@@ -14,10 +14,12 @@ namespace RoboTupiniquimApp.Console
         public static int[] Position { get; set; }
         public static char Orientation { get; set; }
         public string Name { get; set; }
+        public char Marker { get; set; }
 
-        public Robot (string name)
+        public Robot (string name, char marker)
         {
             Name = name;
+            Marker = marker;
         }
 
         public void setRobotGridMap(char[,] robotGridMap)
@@ -57,7 +59,9 @@ namespace RoboTupiniquimApp.Console
             int column = Position[0];
             int line = columnSize - (Position[1] + 1);
 
-            RobotGridMap[line, column] = 'O';
+            RobotGridMap[line, column] = Marker;
+            Position[0] = line;
+            Position[1] = column;
         }
 
         public bool ifMove(int[] position)
@@ -76,49 +80,48 @@ namespace RoboTupiniquimApp.Console
 
         public void moveNorth()
         {
-            int[] position = grid.searchElementPosition(RobotGridMap);
-
+            int[] position = Position;
             position[0] -= 1;
 
             if (ifMove(position))
             {
-                RobotGridMap = grid.update(position, RobotGridMap);
+                RobotGridMap = grid.update(position, Marker);
                 Position = position;
             }
         }
 
         public void moveEast()
         {
-            int[] position = grid.searchElementPosition(RobotGridMap);
+            int[] position = Position;
             position[1] += 1;
 
             if (ifMove(position))
             {
-                RobotGridMap = grid.update(position, RobotGridMap);
+                RobotGridMap = grid.update(position, Marker);
                 Position = position;
             }
         }
 
         public void moveSouth()
         {
-            int[] position = grid.searchElementPosition(RobotGridMap);
+            int[] position = Position;
             position[0] += 1;
 
             if (ifMove(position))
             {
-                RobotGridMap = grid.update(position, RobotGridMap);
+                RobotGridMap = grid.update(position, Marker);
                 Position = position;
             }
         }
 
         public void moveWest()
         {
-            int[] position = grid.searchElementPosition(RobotGridMap);
+            int[] position = Position;
             position[1] -= 1;
 
             if (ifMove(position))
             {
-                RobotGridMap = grid.update(position, RobotGridMap);
+                RobotGridMap = grid.update(position, Marker);
                 Position = position;
             }            
         }
