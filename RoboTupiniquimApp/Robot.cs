@@ -18,7 +18,6 @@ namespace RoboTupiniquimApp.Console
         public Robot (string name)
         {
             Name = name;
-            Position = [-1, -1];
         }
 
         public void setRobotGridMap(char[,] robotGridMap)

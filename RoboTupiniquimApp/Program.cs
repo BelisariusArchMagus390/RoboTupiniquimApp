@@ -73,7 +73,10 @@ namespace RoboTupiniquimApp
                         }
                         else
                         {
+                            int[] coordinate = [-1, -1];
+
                             Robot robot = new Robot(robotName);
+                            robot.setPosition(coordinate);
                             robots.Add(robot);
 
                             System.Console.WriteLine($"\n O novo robô {robotName} foi pedido! ");
