@@ -121,7 +121,7 @@ namespace RoboTupiniquimApp
                                     bot.firstPositionDeploy();
 
                                     grid.show(gridMap);
-
+                                    int[] lol = bot.getPosition();
                                     System.Console.WriteLine(" Aperte Enter para continuar...");
                                     System.Console.ReadLine();
                                 }
@@ -163,7 +163,7 @@ namespace RoboTupiniquimApp
                                 position = bot.getPosition();
                                 orientation = bot.getOrientation();
 
-                                System.Console.WriteLine($" Posição final: {position[1]} {position[0]} | Orientação final: {orientation}\n");
+                                System.Console.WriteLine($" Posição final: {position[1]} { ((gridMap.GetLength(0) - 1) - position[0]) } | Orientação final: {orientation}\n");
 
                                 System.Console.WriteLine(" Aperte Enter para continuar...");
                                 System.Console.ReadLine();
