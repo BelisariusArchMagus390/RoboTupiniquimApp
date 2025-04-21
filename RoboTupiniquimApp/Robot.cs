@@ -10,7 +10,6 @@ namespace RoboTupiniquimApp.Console
     {
         Grid grid = new Grid();
 
-        public static char[,] RobotGridMap { get; set; }
         public static int[] Position { get; set; }
         public static char Orientation { get; set; }
         public string Name { get; set; }
@@ -22,19 +21,9 @@ namespace RoboTupiniquimApp.Console
             Marker = marker;
         }
 
-        public void setRobotGridMap(char[,] robotGridMap)
-        {
-            RobotGridMap = robotGridMap;
-        }
-
         public void setPosition(int[] position)
         {
             Position = position;
-        }
-
-        public char[,] getRobotGridMap()
-        {
-            return RobotGridMap;
         }
 
         public int[] getPosition() 
@@ -54,14 +43,16 @@ namespace RoboTupiniquimApp.Console
 
         public void firstPositionDeploy()
         {
-            int columnSize = RobotGridMap.GetLength(1);
+            int columnSize = grid.getGridMap().GetLength(1);
 
             int column = Position[0];
             int line = columnSize - (Position[1] + 1);
 
-            RobotGridMap[line, column] = Marker;
+            //RobotGridMap[line, column] = Marker;
             Position[0] = line;
             Position[1] = column;
+
+            grid.update(Position, Marker);
         }
 
         public bool ifMove(int[] position)
@@ -69,8 +60,8 @@ namespace RoboTupiniquimApp.Console
             int nextLine = position[0];
             int nextColumn = position[1];
 
-            int lineSize = RobotGridMap.GetLength(0);
-            int columnSize = RobotGridMap.GetLength(1);
+            int lineSize = grid.getGridMap().GetLength(0);
+            int columnSize = grid.getGridMap().GetLength(1);
 
             if ((nextLine < lineSize) && (nextColumn < columnSize))
                 return true;
@@ -85,7 +76,7 @@ namespace RoboTupiniquimApp.Console
 
             if (ifMove(position))
             {
-                RobotGridMap = grid.update(position, Marker);
+                grid.update(position, Marker);
                 Position = position;
             }
         }
@@ -97,7 +88,7 @@ namespace RoboTupiniquimApp.Console
 
             if (ifMove(position))
             {
-                RobotGridMap = grid.update(position, Marker);
+                grid.update(position, Marker);
                 Position = position;
             }
         }
@@ -109,7 +100,7 @@ namespace RoboTupiniquimApp.Console
 
             if (ifMove(position))
             {
-                RobotGridMap = grid.update(position, Marker);
+                grid.update(position, Marker);
                 Position = position;
             }
         }
@@ -121,7 +112,7 @@ namespace RoboTupiniquimApp.Console
 
             if (ifMove(position))
             {
-                RobotGridMap = grid.update(position, Marker);
+                grid.update(position, Marker);
                 Position = position;
             }            
         }

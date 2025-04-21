@@ -15,7 +15,6 @@ namespace RoboTupiniquimApp
             Dictionary<char, int[]> firstPositionDict = new Dictionary<char, int[]>();
             int line = 0;
             int column = 0;
-            char[,] gridMap = new char[line, column];
             int[] position = [-1, -1];
             char orientation = ' ';
             string robotName = "";
@@ -53,11 +52,10 @@ namespace RoboTupiniquimApp
                         dimensions = input.dimensionsGridMap();
                         line = dimensions[0];
                         column = dimensions[1];
-                        gridMap = new char[line, column];
+                        
+                        grid.create(line, column);
 
-                        gridMap = grid.create(line, column);
-
-                        grid.show(gridMap);
+                        grid.show();
 
                         System.Console.WriteLine(" Aperte Enter para continuar...");
                         System.Console.ReadLine();
@@ -120,13 +118,11 @@ namespace RoboTupiniquimApp
 
                                     position = firstPositionDict[orientation];
 
-                                    bot.setRobotGridMap(gridMap);
                                     bot.setPosition(position);
 
-                                    gridMap = bot.getRobotGridMap();
                                     bot.firstPositionDeploy();
 
-                                    grid.show(gridMap);
+                                    grid.show();
                                     int[] lol = bot.getPosition();
                                     System.Console.WriteLine(" Aperte Enter para continuar...");
                                     System.Console.ReadLine();
@@ -164,12 +160,12 @@ namespace RoboTupiniquimApp
 
                                 bot.useCommands(commands, orientation);
 
-                                grid.show(gridMap);
+                                grid.show();
 
                                 position = bot.getPosition();
                                 orientation = bot.getOrientation();
 
-                                System.Console.WriteLine($" Posição final: {position[1]} { ((gridMap.GetLength(0) - 1) - position[0]) } | Orientação final: {orientation}\n");
+                                System.Console.WriteLine($" Posição final: {position[1]} { ((grid.getGridMap().GetLength(0) - 1) - position[0]) } | Orientação final: {orientation}\n");
 
                                 System.Console.WriteLine(" Aperte Enter para continuar...");
                                 System.Console.ReadLine();
