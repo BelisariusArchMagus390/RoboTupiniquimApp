@@ -74,7 +74,7 @@ namespace RoboTupiniquimApp.Console
 
                 if (size == 3)
                 {
-                    for (int i = 0; i < size; i++)
+                    for (int i = 0; i < (size-1); i++)
                     {
                         if (!int.TryParse(splitPosition[i], out coordinates[i]))
                         {
@@ -91,7 +91,10 @@ namespace RoboTupiniquimApp.Console
                     if (Array.IndexOf(directions, orientation) == -1)
                         showErrorMessage("não tem uma direção válida.");
                     else
+                    {
                         firstPositionDict.Add(orientation, coordinates);
+                        ifExit = true;
+                    }
                 }
                 else
                 {

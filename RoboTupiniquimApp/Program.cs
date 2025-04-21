@@ -1,55 +1,51 @@
-﻿namespace RoboTupiniquimApp
+﻿using RoboTupiniquimApp.Console;
+
+namespace RoboTupiniquimApp
 {
     internal class Program
     {
         static void Main(string[] args)
         {
             string commands = "";
-            string dimensionsGrid = "";
-            string firstPosition = "";
-            char orientation = ' ';
-            int lineSize = 0;
-            int columnSize = 0;
+            int[] dimensions = new int[2];
+            Dictionary<char, int[]> firstPositionDict = new Dictionary<char, int[]>();
 
-            int[] position = new int[2];
+            Input input = new Input();
+            Grid grid = new Grid();
 
-            Console.Write("Escreva as dimensões do espaço que será percorrido pelo o rôbo (x y): ");
-            dimensionsGrid = Console.ReadLine();
-            string[] splitCommands = dimensionsGrid.Split(' ');
+            dimensions = input.dimensionsGridMap();
+            int line = dimensions[0];
+            int column = dimensions[1];
+            char[,] gridMap = new char[line, column];
 
-            lineSize = int.Parse(splitCommands[0]);
-            columnSize = int.Parse(splitCommands[1]);
+            gridMap = grid.create(line, column);
 
-            lineSize++;
-            columnSize++;
+            firstPositionDict = input.firstPosition();
 
-            char[,] grid = new char[lineSize, columnSize];
-            createGrid(grid, lineSize, columnSize);
+            char[] orientationArray = firstPositionDict.Keys.ToArray();
+            char orientation = orientationArray[0];
 
-            Console.Write("Escreva a posição inicial do robô (x y o): ");
-            firstPosition = Console.ReadLine();
-            string[] splitPosition = firstPosition.Split(' ');
+            int[] position = firstPositionDict[orientation];
 
-            position[0] = int.Parse(splitPosition[0]);
-            position[1] = int.Parse(splitPosition[1]);
-            orientation = char.Parse(splitPosition[2]);
-            orientation = Char.ToUpper(orientation);
+            Robot robot = new Robot(gridMap, position);
 
-            grid = firstPositionDeploy(grid, position, columnSize);
-            Console.WriteLine();
-            showGrid(grid, lineSize, lineSize);
-            Console.WriteLine();
+            gridMap = robot.getRobotGridMap();
+            robot.firstPositionDeploy();
 
-            Console.Write("Escreva em uma única linha os comandos do robô: ");
-            commands = Console.ReadLine();
+            System.Console.WriteLine();
+            grid.show(gridMap);
+            System.Console.WriteLine();
 
-            grid = useCommands(grid, commands, orientation);
+            commands = input.commandsRobot();
 
-            Console.WriteLine();
-            showGrid(grid, lineSize, lineSize);
-            Console.WriteLine();
+            
+            robot.useCommands(commands, orientation);
 
-            Console.ReadLine();
+            System.Console.WriteLine();
+            grid.show(gridMap);
+            System.Console.WriteLine();
+
+            System.Console.ReadLine();
         }
     }
 }

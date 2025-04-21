@@ -19,6 +19,11 @@ namespace RoboTupiniquimApp.Console
             Position = position;
         }
 
+        public char[,] getRobotGridMap()
+        {
+            return RobotGridMap;
+        }
+
         public void firstPositionDeploy()
         {
             int columnSize = RobotGridMap.GetLength(1);
