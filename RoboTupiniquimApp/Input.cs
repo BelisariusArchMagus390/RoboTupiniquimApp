@@ -44,7 +44,7 @@ namespace RoboTupiniquimApp.Console
                         }
                         else
                         {
-                            showErrorMessage("não tem um ou mais números inteiros.");
+                            showErrorMessage("não tem um ou mais números inteiros");
                             break;
                         }
                             
@@ -52,7 +52,7 @@ namespace RoboTupiniquimApp.Console
                 }
                 else
                 {
-                    showErrorMessage("não tem dois elementos.");
+                    showErrorMessage("não tem dois elementos");
                 }
             }
             return dimensions;
@@ -72,33 +72,39 @@ namespace RoboTupiniquimApp.Console
 
                 int size = splitPosition.Length;
 
+                bool ifIntNumbers = true;
+
                 if (size == 3)
                 {
                     for (int i = 0; i < (size-1); i++)
                     {
                         if (!int.TryParse(splitPosition[i], out coordinates[i]))
                         {
-                            showErrorMessage("não tem um ou mais números inteiros.");
-                            break;
+                            showErrorMessage("não tem um ou mais números inteiros");
+                            i = size;
+                            ifIntNumbers = false;
                         }   
                     }
 
-                    char[] directions = ['N', 'E', 'S', 'W'];
-
-                    char orientation = char.Parse(splitPosition[2]);
-                    orientation = Char.ToUpper(orientation);
-
-                    if (Array.IndexOf(directions, orientation) == -1)
-                        showErrorMessage("não tem uma direção válida.");
-                    else
+                    if (ifIntNumbers == true)
                     {
-                        firstPositionDict.Add(orientation, coordinates);
-                        ifExit = true;
+                        char[] directions = ['N', 'E', 'S', 'W'];
+
+                        char orientation = char.Parse(splitPosition[2]);
+                        orientation = Char.ToUpper(orientation);
+
+                        if (Array.IndexOf(directions, orientation) == -1)
+                            showErrorMessage("não tem uma direção válida");
+                        else
+                        {
+                            firstPositionDict.Add(orientation, coordinates);
+                            ifExit = true;
+                        }
                     }
                 }
                 else
                 {
-                    showErrorMessage("não tem três elementos.");
+                    showErrorMessage("não tem três elementos");
                 }
             }
             return firstPositionDict;
@@ -126,7 +132,7 @@ namespace RoboTupiniquimApp.Console
                             ifExit = true;
                     }
                     else
-                        showErrorMessage("não possui um ou mais comandos existentes.");
+                        showErrorMessage("não possui um ou mais comandos existentes");
                 }
             }
             return commands;
