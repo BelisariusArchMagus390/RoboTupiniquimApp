@@ -41,6 +41,21 @@ namespace RoboTupiniquimApp.Console
             return Name;
         }
 
+        public char getMarker()
+        {
+            return Marker;
+        }
+
+        public void showName()
+        {
+            System.Console.Write(Name);
+        }
+
+        public void showMarker()
+        {
+            System.Console.Write(Marker);
+        }
+
         public void firstPositionDeploy()
         {
             int columnSize = grid.getGridMap().GetLength(1);

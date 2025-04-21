@@ -7,9 +7,13 @@ namespace RoboTupiniquimApp
     internal class Program
     {
         static List<Robot> robots = new List<Robot>();
+        static Input input = new Input();
+        static Grid grid = new Grid();
 
         static void Main(string[] args)
         {
+            System.Console.Title = "Robô Tupiniquim";
+
             string commands = "";
             int[] dimensions = new int[2];
             Dictionary<char, int[]> firstPositionDict = new Dictionary<char, int[]>();
@@ -20,9 +24,6 @@ namespace RoboTupiniquimApp
             string robotName = "";
 
             int robotMarkerCont = 1;
-
-            Input input = new Input();
-            Grid grid = new Grid();
 
             bool ifExit = false;
             while(ifExit == false)
@@ -109,7 +110,11 @@ namespace RoboTupiniquimApp
 
                                 if (pos[0] == -1 && pos[1] == -1)
                                 {
+                                    System.Console.Clear();
                                     showLegends();
+
+                                    showMap();
+                                    System.Console.WriteLine($" Robô: {robotName}");
 
                                     firstPositionDict = input.firstPosition();
 
@@ -122,7 +127,9 @@ namespace RoboTupiniquimApp
 
                                     bot.firstPositionDeploy();
 
-                                    grid.show();
+                                    System.Console.Clear();
+                                    showMap();
+
                                     int[] lol = bot.getPosition();
                                     System.Console.WriteLine(" Aperte Enter para continuar...");
                                     System.Console.ReadLine();
@@ -153,14 +160,21 @@ namespace RoboTupiniquimApp
                             }
                             else
                             {
+                                System.Console.Clear();
+
                                 showLegends();
                                 showPossibleCommands();
+
+                                showMap();
+
+                                System.Console.WriteLine($" Robô: {robotName}\n");
 
                                 commands = input.commandsRobot();
 
                                 bot.useCommands(commands, orientation);
 
-                                grid.show();
+                                System.Console.Clear();
+                                showMap();
 
                                 position = bot.getPosition();
                                 orientation = bot.getOrientation();
@@ -191,12 +205,12 @@ namespace RoboTupiniquimApp
 
         static void showLegends()
         {
-            System.Console.WriteLine("\n LEGENDA");
+            System.Console.WriteLine(" LEGENDA");
             System.Console.WriteLine("\n Direções:");
-            System.Console.WriteLine(" | N(North) - Norte | E(East) - Leste       |");
-            System.Console.WriteLine(" | W(West) - Oeste  | S(South) - Sul        |");
+            System.Console.WriteLine(" | N(North) - Norte | E(East) - Leste            |");
+            System.Console.WriteLine(" | W(West) - Oeste  | S(South) - Sul             |");
             System.Console.WriteLine("\n Mapa: ");
-            System.Console.WriteLine(" | # - Espaço vazio | O - Espaço com o robô |\n");
+            System.Console.WriteLine(" | # - Espaço vazio | Número - Espaço com o robô |\n");
         }
 
         static void showPossibleCommands()
@@ -236,6 +250,22 @@ namespace RoboTupiniquimApp
                 }
             }
             return robot;
+        }
+
+        static void showMap()
+        {
+            System.Console.WriteLine();
+
+            foreach (Robot bot in robots)
+            {
+                System.Console.Write($" -> ");
+                bot.showMarker();
+                System.Console.Write($": ");
+                bot.showName();
+                System.Console.WriteLine();
+            }
+
+            grid.show();
         }
 
         static void showErrorMessage(string message)
