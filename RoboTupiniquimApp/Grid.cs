@@ -10,6 +10,8 @@ namespace RoboTupiniquimApp.Console
     internal class Grid
     {
         public static char[,] GridMap;
+
+        // cria uma nova grid
         public char[,] create(int lineSize, int columnSize)
         {
             GridMap = new char[lineSize, columnSize];
@@ -30,6 +32,7 @@ namespace RoboTupiniquimApp.Console
             return GridMap;
         }
 
+        // mostra a grid em seu estado atual
         public void show()
         {
             int lineSize = GridMap.GetLength(0);
@@ -63,6 +66,7 @@ namespace RoboTupiniquimApp.Console
             System.Console.WriteLine();
         }
 
+        // atualiza a grid
         public char[,] update(int[] position, char marker)
         {
             int[] oldPosition = searchElementPosition(marker);
@@ -78,6 +82,7 @@ namespace RoboTupiniquimApp.Console
             return GridMap;
         }
 
+        // busca a posição do marcador do robô na grid
         public int[] searchElementPosition(char marker)
         {
             int lineSize = GridMap.GetLength(0);
