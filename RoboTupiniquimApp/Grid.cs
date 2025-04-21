@@ -31,6 +31,8 @@ namespace RoboTupiniquimApp.Console
 
             int numberLines = lineSize - 1;
 
+            System.Console.WriteLine();
+
             for (int line = 0; line <= lineSize; line++)
             {
                 if (line < lineSize)
@@ -51,6 +53,8 @@ namespace RoboTupiniquimApp.Console
 
                 System.Console.WriteLine();
             }
+
+            System.Console.WriteLine();
         }
 
         public char[,] update(int[] position, char[,] gridMap)

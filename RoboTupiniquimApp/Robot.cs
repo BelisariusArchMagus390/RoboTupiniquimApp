@@ -13,9 +13,13 @@ namespace RoboTupiniquimApp.Console
         public static char[,] RobotGridMap { get; set; }
         public static int[] Position { get; set; }
 
-        public Robot(char[,] robotGridMap, int[] position)
+        public void setRobotGridMap(char[,] robotGridMap)
         {
             RobotGridMap = robotGridMap;
+        }
+
+        public void setPosition(int[] position)
+        {
             Position = position;
         }
 

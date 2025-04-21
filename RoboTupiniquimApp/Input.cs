@@ -25,7 +25,7 @@ namespace RoboTupiniquimApp.Console
             bool ifExit = false;
             while (ifExit == false)
             {
-                System.Console.Write("Escreva as dimensões do espaço que será percorrido pelo o rôbo (X Y): ");
+                System.Console.Write(" Escreva as dimensões do espaço que será percorrido pelo o rôbo (X Y): ");
                 string dimensionsGrid = System.Console.ReadLine();
                 string[] splitDimensionsGrid = dimensionsGrid.Split(' ');
 
@@ -66,7 +66,7 @@ namespace RoboTupiniquimApp.Console
             bool ifExit = false;
             while (ifExit == false)
             {
-                System.Console.Write("Escreva a posição inicial do robô (X Y O): ");
+                System.Console.Write(" Escreva a posição inicial do robô (X Y O): ");
                 string position = System.Console.ReadLine();
                 string[] splitPosition = position.Split(' ');
 
@@ -111,7 +111,7 @@ namespace RoboTupiniquimApp.Console
 
             while (ifExit == false)
             {
-                System.Console.Write("Escreva em uma única linha os comandos do robô: ");
+                System.Console.Write(" Escreva em uma única linha os comandos do robô: ");
                 commands = System.Console.ReadLine();
 
                 char[] possibleCommands = ['M', 'N', 'E', 'S', 'W'];
