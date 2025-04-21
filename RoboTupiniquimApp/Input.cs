@@ -118,6 +118,7 @@ namespace RoboTupiniquimApp.Console
             {
                 System.Console.Write(" Escreva em uma única linha os comandos do robô: ");
                 commands = System.Console.ReadLine();
+                commands = commands.ToUpper();
 
                 char[] possibleCommands = ['M', 'N', 'E', 'S', 'W'];
 
