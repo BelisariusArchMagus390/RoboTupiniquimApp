@@ -1,293 +1,278 @@
-﻿namespace RoboTupiniquimApp
+﻿using RoboTupiniquimApp.Console;
+using System.Data.Common;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+
+namespace RoboTupiniquimApp
 {
     internal class Program
     {
+        static List<Robot> robots = new List<Robot>();
+        static Input input = new Input();
+        static Grid grid = new Grid();
+
         static void Main(string[] args)
         {
+            System.Console.Title = "Robô Tupiniquim";
+
             string commands = "";
-            string dimensionsGrid = "";
-            string firstPosition = "";
+            int[] dimensions = new int[2];
+            Dictionary<char, int[]> firstPositionDict = new Dictionary<char, int[]>();
+            int line = 0;
+            int column = 0;
+            int[] position = [-1, -1];
             char orientation = ' ';
-            int lineSize = 0;
-            int columnSize = 0;
+            string robotName = "";
 
-            int[] position = new int[2];
+            int robotMarkerCont = 1;
 
-            Console.Write("Escreva as dimensões do espaço que será percorrido pelo o rôbo (x y): ");
-            dimensionsGrid = Console.ReadLine();
-            string[] splitCommands = dimensionsGrid.Split(' ');
-
-            lineSize = int.Parse(splitCommands[0]);
-            columnSize = int.Parse(splitCommands[1]);
-
-            lineSize++;
-            columnSize++;
-
-            char[,] grid = new char[lineSize, columnSize];
-            createGrid(grid, lineSize, columnSize);
-
-            Console.Write("Escreva a posição inicial do robô (x y o): ");
-            firstPosition = Console.ReadLine();
-            string[] splitPosition = firstPosition.Split(' ');
-
-            position[0] = int.Parse(splitPosition[0]);
-            position[1] = int.Parse(splitPosition[1]);
-            orientation = char.Parse(splitPosition[2]);
-            orientation = Char.ToUpper(orientation);
-
-            grid = firstPositionDeploy(grid, position, columnSize);
-            Console.WriteLine();
-            showGrid(grid, lineSize, lineSize);
-            Console.WriteLine();
-
-            Console.Write("Escreva em uma única linha os comandos do robô: ");
-            commands = Console.ReadLine();
-
-            grid = useCommands(grid, commands, orientation);
-
-            Console.WriteLine();
-            showGrid(grid, lineSize, lineSize);
-            Console.WriteLine();
-
-            Console.ReadLine();
-        }
-
-        static char[,] createGrid(char[,] grid, int lineSize, int columnSize)
-        {
-            for (int line = 0; line < lineSize; line++)
+            bool ifExit = false;
+            while(ifExit == false)
             {
-                for (int column = 0; column < columnSize; column++)
+                System.Console.Clear();
+                System.Console.WriteLine(" --------------------------------------------");
+                System.Console.WriteLine($"\n ROBÔ TUPINIQUIM");
+                System.Console.WriteLine("\n --------------------------------------------");
+
+                showLegends();
+
+                System.Console.WriteLine(" --------------------------------------------");
+                System.Console.WriteLine("\n 1 - Criar grade de exploração");
+                System.Console.WriteLine(" 2 - Pedir um robô");
+                System.Console.WriteLine(" 3 - Posição de início do robô");
+                System.Console.WriteLine(" 4 - Comandos do robô");
+                System.Console.WriteLine(" 5 - Sair");
+
+                System.Console.Write("\n Escolha uma das opções: ");
+                char optionMenu = System.Console.ReadLine()[0];
+
+                switch (optionMenu)
                 {
-                    grid[line, column] = '#';
+                    case '1':
+                        System.Console.Clear();
+
+                        dimensions = input.dimensionsGridMap();
+                        line = dimensions[0];
+                        column = dimensions[1];
+                        
+                        grid.create(line, column);
+
+                        grid.show();
+
+                        System.Console.WriteLine(" Aperte Enter para continuar...");
+                        System.Console.ReadLine();
+
+                        break;
+
+                    case '2':
+                        System.Console.Clear();
+
+                        System.Console.Write("\n Escolha o nome do robô: ");
+                        robotName = System.Console.ReadLine();
+
+                        if (checkExistRobot(robotName))
+                        {
+                            showErrorMessage("Esse robô já existe.");
+                        }
+                        else
+                        {
+                            int[] coordinate = [-1, -1];
+                            char marker = robotMarkerCont.ToString()[0]; ;
+
+                            Robot robot = new Robot(robotName, marker);
+                            robot.setPosition(coordinate);
+                            robots.Add(robot);
+
+                            robotMarkerCont++;
+
+                            System.Console.WriteLine($"\n O novo robô {robotName} foi pedido! ");
+                            System.Console.WriteLine("\n Aperte Enter para continuar...");
+                            System.Console.ReadLine();
+                        }
+
+                        break;
+
+                    case '3':
+                        System.Console.Clear();
+
+                        if (line == 0 && column == 0)
+                        {
+                            showErrorMessage("A grade de exploração ainda não foi criada.");
+                        }
+                        else
+                        {
+                            System.Console.Write(" Escolha um robô: ");
+                            robotName = System.Console.ReadLine();
+
+                            if (checkExistRobot(robotName))
+                            {
+                                Robot bot = getRobot(robotName);
+                                int[] pos = bot.getPosition();
+
+                                if (pos[0] == -1 && pos[1] == -1)
+                                {
+                                    System.Console.Clear();
+                                    showLegends();
+
+                                    showMap();
+                                    System.Console.WriteLine($" Robô: {robotName}");
+
+                                    firstPositionDict = input.firstPosition();
+
+                                    char[] orientationArray = firstPositionDict.Keys.ToArray();
+                                    orientation = orientationArray[0];
+
+                                    position = firstPositionDict[orientation];
+
+                                    bot.setPosition(position);
+
+                                    bot.firstPositionDeploy();
+
+                                    System.Console.Clear();
+                                    showMap();
+
+                                    int[] lol = bot.getPosition();
+                                    System.Console.WriteLine(" Aperte Enter para continuar...");
+                                    System.Console.ReadLine();
+                                }
+                                else
+                                    showErrorMessage("Já foi feito o posicionamento inicial desse robô.");
+                            }
+                            else
+                                showErrorMessage("Esse robô não existe.");
+                        }
+
+                        break;
+
+                    case '4':
+                        System.Console.Clear();
+
+                        System.Console.Write(" Escolha um robô: ");
+                        robotName = System.Console.ReadLine();
+
+                        if (checkExistRobot(robotName))
+                        {
+                            Robot bot = getRobot(robotName);
+                            int[] pos = bot.getPosition();
+
+                            if (pos[0] == -1 && pos[1] == -1)
+                            {
+                                showErrorMessage("Ainda não foi feito o posicionamento inicial desse robô.");
+                            }
+                            else
+                            {
+                                System.Console.Clear();
+
+                                showLegends();
+                                showPossibleCommands();
+
+                                showMap();
+
+                                System.Console.WriteLine($" Robô: {robotName}\n");
+
+                                commands = input.commandsRobot();
+
+                                bot.useCommands(commands, orientation);
+
+                                System.Console.Clear();
+                                showMap();
+
+                                position = bot.getPosition();
+                                orientation = bot.getOrientation();
+
+                                System.Console.WriteLine($" Posição final: {position[1]} { ((grid.getGridMap().GetLength(0) - 1) - position[0]) } | Orientação final: {orientation}\n");
+
+                                System.Console.WriteLine(" Aperte Enter para continuar...");
+                                System.Console.ReadLine();
+                            }
+                        }
+                        else
+                            showErrorMessage("Esse robô não existe.");
+
+                        break;
+
+                    case '5':
+                        ifExit = true;
+                        break;
+
+                    default:
+                        System.Console.Clear();
+                        showErrorMessage("Opção incorreta.");
+
+                        break;
                 }
             }
-            return grid;
         }
 
-        static void showGrid(char[,] grid, int lineSize, int columnSize)
+        static void showLegends()
         {
-            int numberLines = lineSize - 1;
+            System.Console.WriteLine(" LEGENDA");
+            System.Console.WriteLine("\n Direções:");
+            System.Console.WriteLine(" | N(North) - Norte | E(East) - Leste            |");
+            System.Console.WriteLine(" | W(West) - Oeste  | S(South) - Sul             |");
+            System.Console.WriteLine("\n Mapa: ");
+            System.Console.WriteLine(" | # - Espaço vazio | Número - Espaço com o robô |\n");
+        }
 
-            for (int line = 0; line <= lineSize; line++)
+        static void showPossibleCommands()
+        {
+            System.Console.WriteLine("\n COMANDOS");
+            System.Console.WriteLine("\n Mudar direção do robô:");
+            System.Console.WriteLine(" | N(North) - Norte | E(East) - Leste |");
+            System.Console.WriteLine(" | W(West) - Oeste  | S(South) - Sul  |");
+            System.Console.WriteLine("\n Mover o robô: ");
+            System.Console.WriteLine(" | M - Mover                          |\n");
+        }
+
+        static bool checkExistRobot(string name)
+        {
+            bool response = false;
+
+            foreach (Robot bot in robots)
             {
-                if (line < lineSize)
+                if (bot.getName() == name)
                 {
-                    Console.Write($"{numberLines} ");
-                    numberLines--;
-                }
-
-                for (int column = 0; column <= columnSize; column++)
-                {
-                    if (column < columnSize && line < lineSize)
-                        Console.Write($"{grid[line, column]} ");
-                    else if (column == 0)
-                        Console.Write($"  {column}");
-                    else if ((column < columnSize) && (column > 0))
-                        Console.Write($" {column}");
-                }
-
-                Console.WriteLine();
-            }
-        }
-
-        static char[,] firstPositionDeploy(char[,] grid, int[] position, int columnSize)
-        {
-            int column = position[0];
-            int line = columnSize - (position[1] + 1);
-
-            grid[line, column] = 'O';
-
-            return grid;
-        }
-
-        static char[,] updatePosition(char[,] grid, int[] position)
-        {
-            int[] oldPosition = searchElementPosition(grid);
-            int oldline = oldPosition[0];
-            int oldColumn = oldPosition[1];
-            grid[oldline, oldColumn] = '#';
-
-            int line = position[0];
-            int column = position[1];
-
-            grid[line, column] = 'O';
-
-            return grid;
-        }
-
-        static int[] searchElementPosition(char[,] grid)
-        {
-            char element = 'O';
-            int lineSize = grid.GetLength(0);
-            int columnSize = grid.GetLength(1);
-            int[] position = new int[2];
-
-            for (int line = 0; line < lineSize; line++)
-            {
-                for (int column = 0; column < columnSize; column++)
-                {
-                    if (grid[line, column] == 'O')
-                    {
-                        position[0] = line;
-                        position[1] = column;
-                    }
-
+                    response = true;
                 }
             }
-            return position;
+            return response;
         }
 
-        static bool ifMove(char[,] grid, int[] position)
+        static Robot getRobot(string name)
         {
-            int nextLine = position[0];
-            int nextColumn = position[1];
+            char marker = '1';
+            Robot robot = new Robot(name, marker);
 
-            int lineSize = grid.GetLength(0);
-            int columnSize = grid.GetLength(1);
-
-            if ((nextLine < lineSize) && (nextColumn < columnSize))
-                return true;
-            else
-                return false;
-        }
-
-        static char[,] moveNorth(char[,] grid)
-        {
-            int[] position = searchElementPosition(grid);
-
-            position[0] -= 1;
-
-            if (ifMove(grid, position))
+            foreach (Robot bot in robots)
             {
-                grid = updatePosition(grid, position);
-            }
-
-            return grid;
-        }
-
-        static char[,] moveEast(char[,] grid)
-        {
-            int[] position = searchElementPosition(grid);
-            position[1] += 1;
-
-            if (ifMove(grid, position))
-            {
-                grid = updatePosition(grid, position);
-            }
-
-            return grid;
-        }
-
-        static char[,] moveSouth(char[,] grid)
-        {
-            int[] position = searchElementPosition(grid);
-            position[0] += 1;
-
-            if (ifMove(grid, position))
-            {
-                grid = updatePosition(grid, position);
-            }
-
-            return grid;
-        }
-
-        static char[,] moveWest(char[,] grid)
-        {
-            int[] position = searchElementPosition(grid);
-            position[1] -= 1;
-
-            if (ifMove(grid, position))
-            {
-                grid = updatePosition(grid, position);
-            }
-
-            return grid;
-        }
-
-        static int newPositionDirection(char[] directions, int positionDirection, int movement)
-        {
-            int arraySize = directions.Length;
-            int newPosition = positionDirection + movement;
-            int resultPosition = 0;
-
-            if (newPosition < arraySize && newPosition >= 0)
-                resultPosition = positionDirection + movement;
-            else if (newPosition < 0)
-                resultPosition = arraySize - 1;
-            else if (resultPosition >= arraySize)
-                resultPosition = 0;
-
-            return resultPosition;
-        }
-
-        static char[,] useCommands(char[,] grid, string commands, char orient)
-        {
-            commands = commands.ToUpper();
-            char inputOrientation = orient;
-            char[] directions = ['N', 'E', 'S', 'W'];
-
-            char robotOrientation = orient;
-
-            int positionDirection = 0;
-
-            foreach (char command in commands)
-            {
-                if (command != 'M')
+                if (bot.getName() == name)
                 {
-                    inputOrientation = command;
-
-                    positionDirection = Array.IndexOf(directions, robotOrientation);
-
-                    switch (inputOrientation)
-                    {
-                        case 'N':
-
-                            if (robotOrientation == 'E')
-                                robotOrientation = directions[newPositionDirection(directions, positionDirection, -1)];
-                            else if (robotOrientation == 'W')
-                                robotOrientation = directions[newPositionDirection(directions, positionDirection, 1)];
-
-                            break;
-                        case 'E':
-
-                            robotOrientation = directions[newPositionDirection(directions, positionDirection, 1)];
-
-                            break;
-                        case 'S':
-
-                            if (robotOrientation == 'E')
-                                robotOrientation = directions[newPositionDirection(directions, positionDirection, 1)];
-                            else if (robotOrientation == 'W')
-                                robotOrientation = directions[newPositionDirection(directions, positionDirection, -1)];
-
-                            break;
-                        case 'W':
-
-                            robotOrientation = directions[newPositionDirection(directions, positionDirection, -1)];
-
-                            break;
-                    }
-                }
-                else if (command == 'M')
-                {
-                    switch (robotOrientation)
-                    {
-                        case 'N':
-                            grid = moveNorth(grid);
-                            break;
-                        case 'E':
-                            grid = moveEast(grid);
-                            break;
-                        case 'S':
-                            grid = moveSouth(grid);
-                            break;
-                        case 'W':
-                            grid = moveWest(grid);
-                            break;
-                    }
+                    robot = bot;
                 }
             }
-            return grid;
+            return robot;
+        }
+
+        static void showMap()
+        {
+            System.Console.WriteLine();
+
+            foreach (Robot bot in robots)
+            {
+                System.Console.Write($" -> ");
+                bot.showMarker();
+                System.Console.Write($": ");
+                bot.showName();
+                System.Console.WriteLine();
+            }
+
+            grid.show();
+        }
+
+        static void showErrorMessage(string message)
+        {
+            System.Console.WriteLine($"\n Erro! {message}");
+            System.Console.WriteLine(" Aperte Enter para continuar...");
+            System.Console.ReadLine();
         }
     }
 }
