@@ -47,7 +47,6 @@ namespace RoboTupiniquimApp.Console
                             showErrorMessage("não tem um ou mais números inteiros");
                             break;
                         }
-                            
                     }       
                 }
                 else

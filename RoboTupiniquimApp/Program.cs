@@ -24,6 +24,13 @@ namespace RoboTupiniquimApp
             while(ifExit == false)
             {
                 System.Console.Clear();
+                System.Console.WriteLine(" --------------------------------------------");
+                System.Console.WriteLine($"\n ROBÔ TUPINIQUIM");
+                System.Console.WriteLine("\n --------------------------------------------");
+
+                showLegends();
+
+                System.Console.WriteLine(" --------------------------------------------");
                 System.Console.WriteLine("\n 1 - Criar grade de exploração");
                 System.Console.WriteLine(" 2 - Posição de início do robô");
                 System.Console.WriteLine(" 3 - Comandos do robô");
@@ -62,6 +69,8 @@ namespace RoboTupiniquimApp
                         }
                         else
                         {
+                            showLegends();
+
                             firstPositionDict = input.firstPosition();
 
                             char[] orientationArray = firstPositionDict.Keys.ToArray();
@@ -94,11 +103,19 @@ namespace RoboTupiniquimApp
                         }
                         else
                         {
+                            showLegends();
+                            showPossibleCommands();
+
                             commands = input.commandsRobot();
 
                             robot.useCommands(commands, orientation);
 
                             grid.show(gridMap);
+
+                            position = robot.getPosition();
+                            orientation = robot.getOrientation();
+
+                            System.Console.WriteLine($" Posição final: {position[1]} {position[0]} | Orientação final: {orientation}\n");
 
                             System.Console.WriteLine(" Aperte Enter para continuar...");
                             System.Console.ReadLine();
@@ -118,7 +135,26 @@ namespace RoboTupiniquimApp
                         break;
                 }
             }
-            System.Console.ReadLine();
+        }
+
+        static void showLegends()
+        {
+            System.Console.WriteLine("\n LEGENDA");
+            System.Console.WriteLine("\n Direções:");
+            System.Console.WriteLine(" | N(North) - Norte | E(East) - Leste       |");
+            System.Console.WriteLine(" | W(West) - Oeste  | S(South) - Sul        |");
+            System.Console.WriteLine("\n Mapa: ");
+            System.Console.WriteLine(" | # - Espaço vazio | O - Espaço com o robô |\n");
+        }
+
+        static void showPossibleCommands()
+        {
+            System.Console.WriteLine("\n COMANDOS");
+            System.Console.WriteLine("\n Mudar direção do robô:");
+            System.Console.WriteLine(" | N(North) - Norte | E(East) - Leste |");
+            System.Console.WriteLine(" | W(West) - Oeste  | S(South) - Sul  |");
+            System.Console.WriteLine("\n Mover o robô: ");
+            System.Console.WriteLine(" | M - Mover                          |\n");
         }
     }
 }
