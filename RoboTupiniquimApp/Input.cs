@@ -9,6 +9,7 @@ namespace RoboTupiniquimApp.Console
 {
     internal class Input
     {
+        // mensagem padrão de erro
         private void showErrorMessage(string typeError)
         {
             System.Console.Clear();
@@ -18,6 +19,7 @@ namespace RoboTupiniquimApp.Console
             System.Console.Clear();
         }
 
+        // input das dimensões do espaço de exploração
         public int[] dimensionsGridMap()
         {
             int[] dimensions = new int[2];
@@ -57,6 +59,7 @@ namespace RoboTupiniquimApp.Console
             return dimensions;
         }
 
+        // input da posição inicial do robô
         public Dictionary<char, int[]> firstPosition()
         {
             int[] coordinates = new int[2];
@@ -109,6 +112,7 @@ namespace RoboTupiniquimApp.Console
             return firstPositionDict;
         }
 
+        // input dos comandos do robô
         public string commandsRobot()
         {
             string commands = "";

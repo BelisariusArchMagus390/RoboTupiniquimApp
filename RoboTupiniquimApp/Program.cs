@@ -28,6 +28,7 @@ namespace RoboTupiniquimApp
             bool ifExit = false;
             while(ifExit == false)
             {
+                // Menu de opções
                 System.Console.Clear();
                 System.Console.WriteLine(" --------------------------------------------");
                 System.Console.WriteLine($"\n ROBÔ TUPINIQUIM");
@@ -47,6 +48,7 @@ namespace RoboTupiniquimApp
 
                 switch (optionMenu)
                 {
+                    // Opção 1 - Criação de grid
                     case '1':
                         System.Console.Clear();
 
@@ -63,6 +65,7 @@ namespace RoboTupiniquimApp
 
                         break;
 
+                    // Opção 2 - Pedir um novo robô
                     case '2':
                         System.Console.Clear();
 
@@ -91,6 +94,7 @@ namespace RoboTupiniquimApp
 
                         break;
 
+                    // Opção 3 - inicialização do robô
                     case '3':
                         System.Console.Clear();
 
@@ -143,6 +147,7 @@ namespace RoboTupiniquimApp
 
                         break;
 
+                    // Opção 4 - Execução dos comandos do robô
                     case '4':
                         System.Console.Clear();
 
@@ -190,10 +195,12 @@ namespace RoboTupiniquimApp
 
                         break;
 
+                    // Opção 5 - Saída do programa
                     case '5':
                         ifExit = true;
                         break;
 
+                    // Saída padrão caso ocorra um erro de entrada
                     default:
                         System.Console.Clear();
                         showErrorMessage("Opção incorreta.");
@@ -203,6 +210,7 @@ namespace RoboTupiniquimApp
             }
         }
 
+        // Mostra a legenda dos símbolos
         static void showLegends()
         {
             System.Console.WriteLine(" LEGENDA");
@@ -213,6 +221,7 @@ namespace RoboTupiniquimApp
             System.Console.WriteLine(" | # - Espaço vazio | Número - Espaço com o robô |\n");
         }
 
+        // Mostra possíveis comandos que podem ser dados para o robô
         static void showPossibleCommands()
         {
             System.Console.WriteLine("\n COMANDOS");
@@ -223,6 +232,7 @@ namespace RoboTupiniquimApp
             System.Console.WriteLine(" | M - Mover                          |\n");
         }
 
+        // Checa pelo o nome se o robô existe
         static bool checkExistRobot(string name)
         {
             bool response = false;
@@ -237,6 +247,7 @@ namespace RoboTupiniquimApp
             return response;
         }
 
+        // Busca e devolve o objeto do robô
         static Robot getRobot(string name)
         {
             char marker = '1';
@@ -252,6 +263,7 @@ namespace RoboTupiniquimApp
             return robot;
         }
 
+        // Mostra o mapa da grid
         static void showMap()
         {
             System.Console.WriteLine();
@@ -268,6 +280,7 @@ namespace RoboTupiniquimApp
             grid.show();
         }
 
+        // Mostra mensagem padrão de erros
         static void showErrorMessage(string message)
         {
             System.Console.WriteLine($"\n Erro! {message}");

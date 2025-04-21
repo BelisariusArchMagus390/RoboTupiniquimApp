@@ -56,11 +56,13 @@ namespace RoboTupiniquimApp.Console
             System.Console.Write(Marker);
         }
 
+        // define a posição inicial do robô
         public void firstPositionDeploy()
         {
             int columnSize = grid.getGridMap().GetLength(1);
 
             int column = Position[0];
+            // para que possa ser visualizado na grid como um plano cartesiano, é feito certas modificações nos índices do elemento
             int line = columnSize - (Position[1] + 1);
 
             //RobotGridMap[line, column] = Marker;
@@ -70,6 +72,7 @@ namespace RoboTupiniquimApp.Console
             grid.update(Position, Marker);
         }
 
+        // verifica se o robô pode se mover, caso ele encotre o final da grid, não fará nada
         public bool ifMove(int[] position)
         {
             int nextLine = position[0];
@@ -84,6 +87,7 @@ namespace RoboTupiniquimApp.Console
                 return false;
         }
 
+        // move o robô o rumo ao norte
         public void moveNorth()
         {
             int[] position = Position;
@@ -96,6 +100,7 @@ namespace RoboTupiniquimApp.Console
             }
         }
 
+        // move o robô o rumo ao leste
         public void moveEast()
         {
             int[] position = Position;
@@ -108,6 +113,7 @@ namespace RoboTupiniquimApp.Console
             }
         }
 
+        // move o robô o rumo ao sul
         public void moveSouth()
         {
             int[] position = Position;
@@ -120,6 +126,7 @@ namespace RoboTupiniquimApp.Console
             }
         }
 
+        // move o robô o rumo ao oeste
         public void moveWest()
         {
             int[] position = Position;
@@ -132,6 +139,7 @@ namespace RoboTupiniquimApp.Console
             }            
         }
 
+        // define qual será a próxima direção do robô
         public int newPositionDirection(char[] directions, int positionDirection, int movement)
         {
             int arraySize = directions.Length;
@@ -148,6 +156,7 @@ namespace RoboTupiniquimApp.Console
             return resultPosition;
         }
 
+        // executa os comandos do robô feitos pelo o usuário
         public void useCommands(string commands, char orient)
         {
             commands = commands.ToUpper();
