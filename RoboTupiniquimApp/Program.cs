@@ -13,7 +13,7 @@ namespace RoboTupiniquimApp
             int line = 0;
             int column = 0;
             char[,] gridMap = new char[line, column];
-            int[] position;
+            int[] position = [-1, -1];
             char orientation = ' ';
 
             Input input = new Input();
@@ -54,37 +54,55 @@ namespace RoboTupiniquimApp
                     case '2':
                         System.Console.Clear();
 
-                        firstPositionDict = input.firstPosition();
+                        if (line == 0 && column == 0)
+                        {
+                            System.Console.WriteLine($"\n Erro! A grade de exploração ainda não foi criada.");
+                            System.Console.WriteLine(" Aperte Enter para continuar...");
+                            System.Console.ReadLine();
+                        }
+                        else
+                        {
+                            firstPositionDict = input.firstPosition();
 
-                        char[] orientationArray = firstPositionDict.Keys.ToArray();
-                        orientation = orientationArray[0];
+                            char[] orientationArray = firstPositionDict.Keys.ToArray();
+                            orientation = orientationArray[0];
 
-                        position = firstPositionDict[orientation];
+                            position = firstPositionDict[orientation];
 
-                        robot.setRobotGridMap(gridMap);
-                        robot.setPosition(position);
-                        
-                        gridMap = robot.getRobotGridMap();
-                        robot.firstPositionDeploy();
+                            robot.setRobotGridMap(gridMap);
+                            robot.setPosition(position);
 
-                        grid.show(gridMap);
+                            gridMap = robot.getRobotGridMap();
+                            robot.firstPositionDeploy();
 
-                        System.Console.WriteLine(" Aperte Enter para continuar...");
-                        System.Console.ReadLine();
+                            grid.show(gridMap);
+
+                            System.Console.WriteLine(" Aperte Enter para continuar...");
+                            System.Console.ReadLine();
+                        }
 
                         break;
 
                     case '3':
                         System.Console.Clear();
 
-                        commands = input.commandsRobot();
+                        if (position[0] == -1 && position[1] == -1)
+                        {
+                            System.Console.WriteLine($"\n Erro! Ainda não foi feito o posicionamento inicial do robô.");
+                            System.Console.WriteLine(" Aperte Enter para continuar...");
+                            System.Console.ReadLine();
+                        }
+                        else
+                        {
+                            commands = input.commandsRobot();
 
-                        robot.useCommands(commands, orientation);
+                            robot.useCommands(commands, orientation);
 
-                        grid.show(gridMap);
+                            grid.show(gridMap);
 
-                        System.Console.WriteLine(" Aperte Enter para continuar...");
-                        System.Console.ReadLine();
+                            System.Console.WriteLine(" Aperte Enter para continuar...");
+                            System.Console.ReadLine();
+                        }
 
                         break;
 
